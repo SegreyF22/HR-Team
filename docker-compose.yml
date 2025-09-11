@@ -1,16 +1,16 @@
 services:
-#  department_db:
-#    image: postgres:15
-#    container_name: hr_db
-#    restart: unless-stopped
-#    environment:
-#      POSTGRES_DB: ${POSTGRES_DB:-hr_db}
-#      POSTGRES_USER: ${POSTGRES_USER:-hr_user}
-#      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hr_pass}
-#    volumes:
-#      - pgdata:/var/lib/postgresql/data
-#    networks:
-#      - hr-network
+  department_db:
+    image: postgres:15
+    container_name: hr_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-hr_db}
+      POSTGRES_USER: ${POSTGRES_USER:-hr_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hr_pass}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - hr-network
 
 
   department:
@@ -23,8 +23,8 @@ services:
       - "8000:8000"
     env_file:
       - .env
-#    depends_on:
-#      - department_db
+    depends_on:
+      - department_db
     networks:
       - hr-network
 
