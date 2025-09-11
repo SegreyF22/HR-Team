@@ -1,0 +1,38 @@
+services:
+#  department_db:
+#    image: postgres:15
+#    container_name: hr_db
+#    restart: unless-stopped
+#    environment:
+#      POSTGRES_DB: ${POSTGRES_DB:-hr_db}
+#      POSTGRES_USER: ${POSTGRES_USER:-hr_user}
+#      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hr_pass}
+#    volumes:
+#      - pgdata:/var/lib/postgresql/data
+#    networks:
+#      - hr-network
+
+
+  department:
+    build: ./hr_department
+#    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./hr_department:/hr_department
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+#    depends_on:
+#      - department_db
+    networks:
+      - hr-network
+
+
+volumes:
+  pgdata:
+
+
+networks:
+  hr-network:
+    driver: bridge
