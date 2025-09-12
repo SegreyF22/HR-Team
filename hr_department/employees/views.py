@@ -1,6 +1,6 @@
 from rest_framework import viewsets, filters
-from .models import Employee, Department
-from .serializers import EmployeeSerializer, DepartmentSerializer
+from .models import Employee, Department, User
+from .serializers import EmployeeSerializer, DepartmentSerializer, UserSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
 
@@ -14,5 +14,9 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     search_fields = ['last_name', 'first_name', 'patronymic']
     filters_fields = ['department']
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.select_related('user_id').all()
+    serializer_class = UserSerializer
 
 

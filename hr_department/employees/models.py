@@ -2,6 +2,9 @@ from datetime import date
 
 from django.db import models
 from django.utils import timezone
+import secrets
+import string
+from unidecode import unidecode
 
 
 class Department(models.Model):
@@ -18,7 +21,7 @@ class Department(models.Model):
         return self.name
 
     def calculate_employees_count(self):
-        count = self.employees.count
+        count = self.employees.count()
         self.employees_count = count
         self.save(update_fields=["employees_count"])
         return count
@@ -90,3 +93,38 @@ class Employee(models.Model):
             parts.append(
                 f"{d} {'день' if d % 10 == 1 and d % 100 != 11 else 'дня' if 2 <= d % 10 <= 4 and not 12 <= d % 100 <= 14 else 'дней'}")
         return ', '.join(parts) if parts else '0 дней'
+
+class User(models.Model):
+    user_id = models.OneToOneField(Employee, on_delete=models.CASCADE, related_name='user', verbose_name='Сотрудник')
+    name = models.CharField(max_length=255, editable=False, verbose_name='Имя пользователя')
+    login = models.CharField(max_length=255, unique=True, editable=False, verbose_name='Логин')
+    password = models.CharField(max_length=100, editable=False, verbose_name='Пароль')
+
+    class Meta:
+        db_table = 'users'
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            initials = ''
+            if self.user_id.last_name:
+                initials += self.user_id.last_name[0]
+            if self.user_id.patronymic:
+                initials += self.user_id.patronymic[0]
+            self.name = f"{self.user_id.first_name}{initials}".strip()
+
+        if not self.login:
+            self.login = unidecode(self.name.lower().replace(' ', ''))
+
+        if not self.password:
+            alphabet = string.ascii_letters + string.digits
+            self.password = ''.join(secrets.choice(alphabet) for _ in range(10))
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.login
+
+
+

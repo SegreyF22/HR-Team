@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Employee, Department
+from .models import Employee, Department, User
 
 
 class DepartmentSerializer(serializers.ModelSerializer):
@@ -16,7 +16,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ['id','last_name', 'first_name', 'patronymic', 'fio', 'position', 'department', 'department_id',
+        fields = ['id','last_name', 'first_name', 'patronymic', 'fio', 'position','rank', 'department', 'department_id',
                   'date_hired', 'date_of_birth', 'tenure']
 
     def get_fio(self, obj):
@@ -25,3 +25,9 @@ class EmployeeSerializer(serializers.ModelSerializer):
     def get_tenure(self, obj):
         years, months, days = obj.get_tenure()
         return {'years': years, 'months': months, 'days': days, 'display': obj.tenure_display}
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['user_id', 'name', 'login', 'password']
+        read_only_fields = ['name', 'login', 'passwprd']
