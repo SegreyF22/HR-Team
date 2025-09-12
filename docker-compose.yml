@@ -2,7 +2,7 @@ services:
   department_db:
     image: postgres:15
     container_name: hr_db
-    restart: unless-stopped
+    restart: always
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-hr_db}
       POSTGRES_USER: ${POSTGRES_USER:-hr_user}
