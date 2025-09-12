@@ -28,9 +28,10 @@ class Employee(models.Model):
     last_name = models.CharField(max_length=100, verbose_name='Фамилия')
     first_name = models.CharField(max_length=100, verbose_name='Имя')
     patronymic = models.CharField(max_length=100, verbose_name='Отчество')
-    position = models.CharField(max_length=200, blank=True, verbose_name='Должность')
     department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True,
                                    blank=True, related_name='employees', verbose_name='Отдел')
+    position = models.CharField(max_length=200, blank=True, verbose_name='Должность')
+    rank = models.CharField(max_length=100, default='Рядовой', verbose_name='Звание')
     date_hired = models.DateField(verbose_name='Дата приема на работу')
     date_of_birth = models.DateField(blank=True, null=True, verbose_name='Дата рождения')
     created_at = models.DateTimeField(auto_now_add=True)
