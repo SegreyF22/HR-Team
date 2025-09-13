@@ -42,12 +42,12 @@ class Employee(models.Model):
 
     class Meta:
         db_table = 'employees'
-        ordering = ['last_name', 'first_name']
+        ordering = ['first_name', 'last_name']
         verbose_name = 'Сотрудник'
         verbose_name_plural = 'Сотрудники'
 
     def __str__(self):
-        fio = ' '.join(filter(None, [self.last_name, self.first_name, self.patronymic]))
+        fio = ' '.join(filter(None, [self.first_name, self.last_name, self.patronymic]))
         return fio
 
     def get_tenure(self, as_of: date = None):

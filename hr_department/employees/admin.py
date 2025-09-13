@@ -8,10 +8,10 @@ class DepartmentAdmin(admin.ModelAdmin):
 
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
-    list_display = ('last_name', 'first_name', 'patronymic', 'position',
+    list_display = ('first_name','last_name', 'patronymic', 'position',
                     'department', 'date_hired', 'tenure_display')
     list_filter = ('department',)
-    search_fields = ('last_name', 'first_name', 'patronymic')
+    search_fields = ('first_name', 'last_name', 'patronymic')
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
