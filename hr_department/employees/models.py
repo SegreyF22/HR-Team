@@ -28,8 +28,8 @@ class Department(models.Model):
 
 
 class Employee(models.Model):
-    last_name = models.CharField(max_length=100, verbose_name='Фамилия')
-    first_name = models.CharField(max_length=100, verbose_name='Имя')
+    first_name = models.CharField(max_length=100, verbose_name='Фамилия')
+    last_name = models.CharField(max_length=100, verbose_name='Имя')
     patronymic = models.CharField(max_length=100, verbose_name='Отчество')
     department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True,
                                    blank=True, related_name='employees', verbose_name='Отдел')
@@ -112,7 +112,7 @@ class User(models.Model):
                 initials += self.user_id.last_name[0]
             if self.user_id.patronymic:
                 initials += self.user_id.patronymic[0]
-            self.name = f"{self.user_id.first_name}{initials}".strip()
+            self.name = f"{self.user_id.first_name}_{initials}".strip()
 
         if not self.login:
             self.login = unidecode(self.name.lower().replace(' ', ''))
