@@ -15,7 +15,7 @@ services:
 
   department:
     build: ./hr_department
-#    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    #    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     command: sh -c "python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./hr_department:/hr_department
@@ -25,12 +25,43 @@ services:
       - .env
     depends_on:
       - department_db
+      - accounting
+    networks:
+      - hr-network
+
+  mongo:
+    image: mongo:6
+    container_name: accounting_db
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "21017:21017"
+    networks:
+      - hr-network
+
+  accounting:
+    build: ./accounting
+    container_name: accounting_service
+    command: sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload"
+    volumes:
+      - ./accounting:/app
+    ports:
+      - "8001:8001"
+#    env_file:
+#      - .env
+    environment:
+      MONGO_URI: mongodb://mongo:27017
+      MONGO_DB: accounting_db
+    depends_on:
+      - mongo
     networks:
       - hr-network
 
 
 volumes:
   pgdata:
+  mongo_data:
 
 
 networks:
